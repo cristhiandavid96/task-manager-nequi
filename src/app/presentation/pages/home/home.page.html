@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Tareas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item class="ion-margin-bottom">
+    <ion-input placeholder="Nueva tarea" [(ngModel)]="taskTitle"></ion-input>
+  </ion-item>
+
+  <ion-item class="ion-margin-bottom">
+    <ion-select
+      placeholder="Seleccione Categoría"
+      [(ngModel)]="selectedCategoryId"
+    >
+      <ion-select-option
+        *ngFor="let category of categories$ | async"
+        [value]="category.id"
+      >
+        {{ category.name }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-button expand="block" (click)="addTask()" color="secondary"
+    >Agregar</ion-button
+  >
+
+  <div *ngIf="newFeatureEnabled">
+    <ion-item>
+      <ion-label>
+        <h1>Filtrar Categoria :</h1>
+      </ion-label>
+    </ion-item>
+    <ion-item class="ion-margin-bottom">
+      <ion-select
+        placeholder="Filtrar por Categoría"
+        [(ngModel)]="filterCategoryId"
+        (ionChange)="filterTasks()"
+      >
+        <ion-select-option [value]="null">Todas</ion-select-option>
+        <ion-select-option
+          *ngFor="let category of categories$ | async"
+          [value]="category.id"
+        >
+          {{ category.name }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
+
+  <ion-item>
+    <ion-label>
+      <h1>Tareas agregadas:</h1>
+    </ion-label>
+  </ion-item>
+
+  <ion-list>
+    <ion-item *ngFor="let task of filteredTasks$ | async">
+      <ion-label [ngClass]="{'completed-task': task.completed}">
+        <h2>{{ task.title }}</h2>
+        <p>{{ task.categoryName }}</p>
+      </ion-label>
+      <ion-buttons slot="end">
+        <ion-checkbox (click)="toggleTaskCompletion(task.id)">
+          <ion-icon
+            [name]="task.completed ? 'checkmark-circle' : 'ellipse-outline'"
+          ></ion-icon>
+        </ion-checkbox>
+        <ion-button (click)="removeTask(task.id)" color="danger">
+          <ion-icon name="trash"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+</ion-content>

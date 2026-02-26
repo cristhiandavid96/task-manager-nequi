@@ -1,0 +1,33 @@
+ion-toolbar {
+  --background: #9b59b6;
+}
+
+ion-button {
+  --background: #9b59b6;
+}
+
+.completed-task h2 {
+  text-decoration: line-through; /* Tachar el título de la tarea */
+  color: #999; /* Opcional: Cambiar el color del texto a gris para mostrar que está completado */
+}
+
+.completed-task p {
+  text-decoration: line-through; /* Tachar también la categoría si deseas */
+  color: #999; /* Opcional: Cambiar el color del texto a gris */
+}
+.completed {
+  text-decoration: line-through;
+  color: gray;
+}
+
+.task-input-container {
+  margin-bottom: 10px; /* Agregar espacio debajo del input */
+}
+
+.category-select-container {
+  margin-bottom: 20px; /* Agregar más espacio debajo del select */
+}
+
+.task-input {
+  padding: 10px; /* Añadir un poco de relleno al input */
+}
