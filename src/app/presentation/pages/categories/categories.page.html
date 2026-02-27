@@ -1,26 +1,65 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Categorías</ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>
+      <span class="toolbar-logo">🏷️ Categorías</span>
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-item>
-    <ion-input placeholder="Nueva categoría" [(ngModel)]="categoryName"></ion-input>
-    <ion-button (click)="addCategory()" color="secondary">Agregar</ion-button>
-  </ion-item>
+<ion-content>
+  <div class="categories-content">
 
-  <ion-list>
-    <ion-item *ngFor="let category of categories">
-      <ion-label>{{ category.name }}</ion-label>
-      <ion-buttons slot="end">
-        <ion-button (click)="editCategory(category)" color="tertiary">
-          <ion-icon name="create-outline"></ion-icon>
+    <!-- ── Nueva Categoría Card ── -->
+    <ion-card class="form-card animate-in">
+      <ion-card-header>
+        <ion-card-title class="form-card__title">Nueva categoría</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="input-group">
+          <ion-icon name="pricetag-outline" class="input-icon"></ion-icon>
+          <ion-input id="category-name-input" class="nequi-input" placeholder="Nombre de la categoría"
+            [(ngModel)]="categoryName" autocapitalize="sentences" clearInput (keyup.enter)="addCategory()"></ion-input>
+        </div>
+
+        <ion-button id="add-category-btn" expand="block" color="secondary" (click)="addCategory()" class="add-btn">
+          <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+          Agregar categoría
         </ion-button>
-        <ion-button (click)="removeCategory(category.id)" color="danger">
-          <ion-icon name="trash"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ion-item>
-  </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- ── Lista de Categorías ── -->
+    <p class="section-title">Tus categorías</p>
+
+    <!-- Empty state -->
+    <div class="empty-state animate-in" *ngIf="categories.length === 0">
+      <ion-icon name="pricetags-outline" class="empty-state__icon"></ion-icon>
+      <p class="empty-state__title">Sin categorías</p>
+      <p class="empty-state__subtitle">Crea una categoría para organizar mejor tus tareas.</p>
+    </div>
+
+    <!-- Grid de categorías -->
+    <div class="categories-grid" *ngIf="categories.length > 0">
+      <div class="category-card animate-in" *ngFor="let category of categories">
+        <div class="category-card__icon">
+          <ion-icon name="pricetag"></ion-icon>
+        </div>
+        <span class="category-card__name">{{ category.name }}</span>
+        <div class="category-card__actions">
+          <ion-button fill="clear" class="action-btn action-btn--edit" [id]="'edit-cat-' + category.id"
+            (click)="editCategory(category)">
+            <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" class="action-btn action-btn--delete" [id]="'delete-cat-' + category.id"
+            (click)="removeCategory(category.id)">
+            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spacer -->
+    <div style="height: 24px;"></div>
+
+  </div>
 </ion-content>

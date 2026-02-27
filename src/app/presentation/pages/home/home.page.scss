@@ -1,33 +1,211 @@
-ion-toolbar {
-  --background: #9b59b6;
+// ── Home Page Styles — Nequi ──────────────────────────────────
+
+.home-content {
+  padding: 16px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-ion-button {
-  --background: #9b59b6;
+// ── Toolbar logo ──────────────────────────────────────────────
+.toolbar-logo {
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
 }
 
-.completed-task h2 {
-  text-decoration: line-through; /* Tachar el título de la tarea */
-  color: #999; /* Opcional: Cambiar el color del texto a gris para mostrar que está completado */
+.task-counter {
+  margin-right: 12px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 100px;
+  --background: var(--nequi-secondary);
 }
 
-.completed-task p {
-  text-decoration: line-through; /* Tachar también la categoría si deseas */
-  color: #999; /* Opcional: Cambiar el color del texto a gris */
-}
-.completed {
-  text-decoration: line-through;
-  color: gray;
+// ── Formulario card ───────────────────────────────────────────
+.form-card {
+  --background: var(--nequi-surface);
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--nequi-primary);
+    letter-spacing: -0.01em;
+  }
 }
 
-.task-input-container {
-  margin-bottom: 10px; /* Agregar espacio debajo del input */
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1.5px solid var(--nequi-border);
+  border-radius: var(--nequi-radius-sm);
+  padding: 4px 12px;
+  margin-bottom: 12px;
+  background: var(--nequi-surface-alt);
+  transition: border-color 0.2s ease;
+
+  &:focus-within {
+    border-color: var(--nequi-secondary);
+    background: var(--nequi-surface);
+  }
 }
 
-.category-select-container {
-  margin-bottom: 20px; /* Agregar más espacio debajo del select */
+.input-icon {
+  color: var(--nequi-text-secondary);
+  font-size: 1.2rem;
+  flex-shrink: 0;
 }
 
-.task-input {
-  padding: 10px; /* Añadir un poco de relleno al input */
+.nequi-input {
+  --background: transparent;
+  --border-width: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+  font-size: 0.95rem;
+  flex: 1;
+}
+
+.add-btn {
+  margin-top: 4px;
+  --background: var(--nequi-secondary);
+  --background-hover: #c0006e;
+  --box-shadow: 0 4px 16px rgba(218, 0, 129, 0.35);
+}
+
+// ── Filtros chips ─────────────────────────────────────────────
+.filter-chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.filter-chip {
+  --background: var(--nequi-surface);
+  --color: var(--nequi-text-secondary);
+  border: 1.5px solid var(--nequi-border);
+  border-radius: var(--nequi-radius-pill);
+  font-size: 0.82rem;
+  font-weight: 500;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &.active {
+    --background: rgba(218, 0, 129, 0.12);
+    --color: var(--nequi-secondary);
+    border-color: var(--nequi-secondary);
+    font-weight: 700;
+  }
+}
+
+// ── Lista de tareas ───────────────────────────────────────────
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.task-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--nequi-surface);
+  border-radius: var(--nequi-radius-md);
+  padding: 14px 14px 14px 16px;
+  box-shadow: var(--nequi-shadow-sm);
+  border: 1.5px solid var(--nequi-border);
+  transition: opacity 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+
+  &:active {
+    transform: scale(0.99);
+  }
+
+  &--completed {
+    opacity: 0.6;
+
+    .task-card__title {
+      text-decoration: line-through;
+      color: var(--nequi-text-secondary);
+    }
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  &__title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--nequi-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.2s;
+  }
+
+  &__cat {
+    font-size: 0.72rem;
+    padding: 2px 8px;
+  }
+
+  &__delete {
+    --color: var(--ion-color-danger);
+    --padding-start: 8px;
+    --padding-end: 8px;
+    flex-shrink: 0;
+    margin-left: 8px;
+  }
+}
+
+// ── Checkbox personalizado Nequi ─────────────────────────────
+.task-check {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2.5px solid var(--nequi-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  background: var(--nequi-surface-alt);
+
+  ion-icon {
+    font-size: 14px;
+    color: white;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.15s ease;
+  }
+
+  &--done {
+    background: var(--nequi-secondary);
+    border-color: var(--nequi-secondary);
+    box-shadow: 0 2px 8px rgba(218, 0, 129, 0.40);
+
+    ion-icon {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 }

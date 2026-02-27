@@ -1,77 +1,104 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Tareas</ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>
+      <span class="toolbar-logo">✓ Mis Tareas</span>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-badge *ngIf="(filteredTasks$ | async)?.length as count" color="secondary" class="task-counter">
+        {{ count }}
+      </ion-badge>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-item class="ion-margin-bottom">
-    <ion-input placeholder="Nueva tarea" [(ngModel)]="taskTitle"></ion-input>
-  </ion-item>
+<ion-content>
+  <div class="home-content">
 
-  <ion-item class="ion-margin-bottom">
-    <ion-select
-      placeholder="Seleccione Categoría"
-      [(ngModel)]="selectedCategoryId"
-    >
-      <ion-select-option
-        *ngFor="let category of categories$ | async"
-        [value]="category.id"
-      >
-        {{ category.name }}
-      </ion-select-option>
-    </ion-select>
-  </ion-item>
+    <!-- ── Nueva Tarea Card ── -->
+    <ion-card class="form-card animate-in">
+      <ion-card-header>
+        <ion-card-title class="form-card__title">Nueva tarea</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
 
-  <ion-button expand="block" (click)="addTask()" color="secondary"
-    >Agregar</ion-button
-  >
+        <!-- Input título -->
+        <div class="input-group">
+          <ion-icon name="create-outline" class="input-icon"></ion-icon>
+          <ion-input id="task-title-input" class="nequi-input" placeholder="¿Qué necesitas hacer?"
+            [(ngModel)]="taskTitle" autocapitalize="sentences" clearInput></ion-input>
+        </div>
 
-  <div *ngIf="newFeatureEnabled">
-    <ion-item>
-      <ion-label>
-        <h1>Filtrar Categoria :</h1>
-      </ion-label>
-    </ion-item>
-    <ion-item class="ion-margin-bottom">
-      <ion-select
-        placeholder="Filtrar por Categoría"
-        [(ngModel)]="filterCategoryId"
-        (ionChange)="filterTasks()"
-      >
-        <ion-select-option [value]="null">Todas</ion-select-option>
-        <ion-select-option
-          *ngFor="let category of categories$ | async"
-          [value]="category.id"
-        >
-          {{ category.name }}
-        </ion-select-option>
-      </ion-select>
-    </ion-item>
-  </div>
+        <!-- Select categoría -->
+        <div class="input-group">
+          <ion-icon name="pricetag-outline" class="input-icon"></ion-icon>
+          <ion-select id="task-category-select" class="nequi-input" placeholder="Seleccionar categoría"
+            [(ngModel)]="selectedCategoryId" interface="action-sheet" cancelText="Cancelar">
+            <ion-select-option *ngFor="let category of categories$ | async" [value]="category.id">{{ category.name
+              }}</ion-select-option>
+          </ion-select>
+        </div>
 
-  <ion-item>
-    <ion-label>
-      <h1>Tareas agregadas:</h1>
-    </ion-label>
-  </ion-item>
-
-  <ion-list>
-    <ion-item *ngFor="let task of filteredTasks$ | async">
-      <ion-label [ngClass]="{'completed-task': task.completed}">
-        <h2>{{ task.title }}</h2>
-        <p>{{ task.categoryName }}</p>
-      </ion-label>
-      <ion-buttons slot="end">
-        <ion-checkbox (click)="toggleTaskCompletion(task.id)">
-          <ion-icon
-            [name]="task.completed ? 'checkmark-circle' : 'ellipse-outline'"
-          ></ion-icon>
-        </ion-checkbox>
-        <ion-button (click)="removeTask(task.id)" color="danger">
-          <ion-icon name="trash"></ion-icon>
+        <!-- Botón Agregar -->
+        <ion-button id="add-task-btn" expand="block" color="secondary" (click)="addTask()" class="add-btn">
+          <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+          Agregar tarea
         </ion-button>
-      </ion-buttons>
-    </ion-item>
-  </ion-list>
+
+      </ion-card-content>
+    </ion-card>
+
+    <!-- ── Filtro por Categoría (feature flag) ── -->
+    <ng-container *ngIf="newFeatureEnabled">
+      <p class="section-title">Filtrar por categoría</p>
+      <div class="filter-chips">
+        <ion-chip id="filter-chip-all" [class.active]="!filterCategoryId"
+          (click)="filterCategoryId = null; filterTasks()" class="filter-chip">
+          <ion-label>Todas</ion-label>
+        </ion-chip>
+        <ion-chip *ngFor="let cat of categories$ | async" [id]="'filter-chip-' + cat.id"
+          [class.active]="filterCategoryId === cat.id" (click)="filterCategoryId = cat.id; filterTasks()"
+          class="filter-chip">
+          <ion-label>{{ cat.name }}</ion-label>
+        </ion-chip>
+      </div>
+    </ng-container>
+
+    <!-- ── Lista de Tareas ── -->
+    <p class="section-title">Tareas</p>
+
+    <!-- Empty state -->
+    <div class="empty-state animate-in" *ngIf="(filteredTasks$ | async)?.length === 0">
+      <ion-icon name="checkbox-outline" class="empty-state__icon"></ion-icon>
+      <p class="empty-state__title">¡Sin tareas pendientes!</p>
+      <p class="empty-state__subtitle">Agrega una tarea arriba para comenzar.</p>
+    </div>
+
+    <!-- Task list -->
+    <div class="task-list">
+      <div class="task-card animate-in" *ngFor="let task of filteredTasks$ | async"
+        [class.task-card--completed]="task.completed">
+        <!-- Checkbox y texto -->
+        <div class="task-card__left" (click)="toggleTaskCompletion(task.id)">
+          <div class="task-check" [class.task-check--done]="task.completed">
+            <ion-icon [name]="task.completed ? 'checkmark' : ''"></ion-icon>
+          </div>
+          <div class="task-card__text">
+            <span class="task-card__title">{{ task.title }}</span>
+            <span class="nequi-badge nequi-badge--secondary task-card__cat">
+              {{ task.categoryName }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Eliminar -->
+        <ion-button fill="clear" color="danger" class="task-card__delete" (click)="removeTask(task.id)">
+          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- Spacer para el tab bar -->
+    <div style="height: 24px;"></div>
+
+  </div>
 </ion-content>

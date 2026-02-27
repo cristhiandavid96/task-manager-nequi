@@ -1,9 +1,36 @@
+// ── Tabs Component Styles — Nequi ────────────────────────────
+
 ion-tab-bar {
-    --background: #9b59b6;
-    --color: #ffffff;
+  --background: var(--nequi-surface);
+  border-top: 1px solid var(--nequi-border);
+  box-shadow: 0 -4px 20px rgba(77, 51, 77, 0.08);
+  height: 64px;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+ion-tab-button {
+  --color: var(--nequi-text-secondary);
+  --color-selected: var(--nequi-secondary);
+  --ripple-color: rgba(218, 0, 129, 0.15);
+  max-width: 120px;
+  transition: all 0.2s ease;
+
+  ion-icon {
+    font-size: 1.5rem;
+    transition: transform 0.2s ease;
   }
-  
-  ion-tab-button {
-    --color-selected: #ffffff;
+
+  ion-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    margin-top: 3px;
+    font-family: var(--ion-font-family);
   }
-  
+
+  &.tab-selected {
+    ion-icon {
+      transform: translateY(-2px);
+    }
+  }
+}
